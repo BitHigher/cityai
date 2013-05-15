@@ -48,7 +48,7 @@ def kmeans(points, k):
 	return centers, parts
 
 # ATTENTION!!! most important
-def costf(sol, parts):
+def costf2(sol, parts):
 	cost = 0.
 	for c in sol:
 		for points in parts:
@@ -56,6 +56,21 @@ def costf(sol, parts):
 				cost += distance(c, p)
 	return cost/10000000
 
+def costf(sol, parts):
+	k = len(sol)
+	cost = [float(i) for i in range(k)]
+	for i in range(k):
+		cost[i] = 0.0
+		for points in parts:
+			for p in points:
+				cost[i] += distance(sol[i], p)
+		cost[i] /= 100000000
+
+	cost = sorted(cost)
+	result = 0.0
+	for i in range(k):
+		result += cost[i] * pow(2, k-i-1)
+	return result
 def random_smooth_sol(current_sol):
 	sol = current_sol[:]
 	index = randint(0, len(current_sol)-1)
@@ -109,4 +124,4 @@ def test(n_points, k):
 
 
 if __name__ == '__main__':
-	test(10000, 5)
+	test(10000, 8)
