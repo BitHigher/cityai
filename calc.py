@@ -56,18 +56,20 @@ def kmeans(points, k):
 
 def costf(sol, groups):
 	k = len(sol)
-	cost = [0 for i in range(k)]
+	cost = [[] for i in range(k)]
 	for i in range(k):
-		cost[i] = 0.0
 		for group in groups:
+			gsum = 0.0
 			for p in group:
-				cost[i] + distance(sol[i], p)
-		cost[i] /= 100000000
+				gsum += distance(sol[i], p)
+			gsum /= 100000000
+			cost[i].append(gsum)
 
-	cost = sorted(cost)
 	result = 0.0
 	for i in range(k):
-		result += cost[i] * pow(2, k-i-1)
+		cost[i] = sorted(cost[i])
+		for j in range(k):
+			result += cost[i][j] * pow(2, k-j-1)
 	return result
 
 def random_smooth_sol(current_sol):
@@ -97,15 +99,16 @@ def test():
 	points = random_points(10000)
 	centers, groups = kmeans(points, 8)	
 	sol, cost = annealing(groups, centers)
-	
-	from matplotlib import pyplot as plt
-	for group in groups:
-		plt.plot([i for (i,j) in group], [j for (i, j) in group], '2')	
+#	print sol, cost
 
-	plt.plot([i for(i,j) in centers], [j for (i,j) in centers], 'ro')
-	plt.plot([i for(i,j) in sol], [j for (i,j) in sol], '*')
+#	from matplotlib import pyplot as plt
+#	for group in groups:
+#		plt.plot([i for (i,j) in group], [j for (i, j) in group], '2')	
+
+#	plt.plot([i for(i,j) in centers], [j for (i,j) in centers], 'ro')
+#	plt.plot([i for(i,j) in sol], [j for (i,j) in sol], '*')
 	
-	plt.show()
+#	plt.show()
 
 if __name__ == '__main__':
 	test()
