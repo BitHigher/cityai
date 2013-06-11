@@ -111,10 +111,10 @@ def annealing(groups, centers, T=10000.0, cool=0.95):
 		sol = random_smooth_sol(best_sol)
 		cost = costf(sol, groups)
 
-		if cost < best_cost or random() < math.exp(-(cost-best_cost)/T):
+		if cost < best_cost or random() < math.exp(-(cost-best_cost)/T*100):
 			best_cost = cost
 			best_sol = sol
-
+	
 	return best_cost, best_sol
 
 def genetic(groups, centers, popsize=50, 
@@ -239,8 +239,8 @@ def test():
 		g_weight = int(raw_input("[Please input weight]:"))
 		g_use_weight = True
 		print "Weight is set to ", g_weight, ", computing..."
-		w_cost, w_sol = method(groups, centers)
-		
+		w_cost, w_sol = method(groups, sol)
+
 		g_use_weight = False
 		weighted_cost = costf(w_sol, g_weight_points)
 		print "Total Cost:", w_cost - weighted_cost*(g_weight-1)
